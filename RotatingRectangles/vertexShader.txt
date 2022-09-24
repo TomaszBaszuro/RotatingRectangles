@@ -1,10 +1,17 @@
-#version 330 core
+#version 460 core
 layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aColor;
 
-uniform mat4 transform;
+layout (std430, binding=3) buffer bufferSSBO
+{ 
+  vec4 color;
+  mat4 transformations;
+}ssbo;
+
+out vec4 Color;
 
 void main()
 {
-    gl_Position = transform * vec4(aPos, 1.0f);
+    gl_Position = ssbo.transformations * vec4(aPos, 1.0f);
+	// gl_Position = ssbo[gl_InstanceID].transformations * vec4(aPos, 1.0f);
+	Color = ssbo.color;
 }
