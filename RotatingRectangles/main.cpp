@@ -70,6 +70,17 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, SSBO);
+
+    glm::vec4 color = glm::vec4(0.5f, 0.9f, 0.7f, 1.0f);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(color) + sizeof(glm::mat4[4]), glm::value_ptr(color), GL_DYNAMIC_DRAW);
+    glm::mat4 transformations[4];
+
+    transformations[0] = glm::mat4(1.0f);
+    transformations[1] = glm::mat4(1.0f);
+    transformations[2] = glm::mat4(1.0f);
+    transformations[3] = glm::mat4(1.0f);
+
     while (!glfwWindowShouldClose(window))
     {
         processInput(window);
@@ -79,19 +90,30 @@ int main()
 
         Shader.use();
 
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, SSBO);
+        
+        transformations[0] = glm::translate(transformations[0], glm::vec3(-0.5, 0.5, 0.5));
+        transformations[0] = glm::rotate(transformations[0], (float)glfwGetTime(), glm::vec3(0.0, 0.0, -1.0));
+        transformations[0] = glm::scale(transformations[0], glm::vec3(0.65, 0.65, 0.65));
+        
+        transformations[1] = glm::translate(transformations[1], glm::vec3(0.5, 0.5, 0.5));
+        transformations[1] = glm::rotate(transformations[1], (float)glfwGetTime(), glm::vec3(0.0, 0.0, -1.0));
+        transformations[1] = glm::scale(transformations[1], glm::vec3(0.65, 0.65, 0.65));
        
-        glm::vec4 color = glm::vec4(0.5f,0.2f,0.7f,1.0f);
-        glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(color)+sizeof(glm::mat4), glm::value_ptr(color), GL_DYNAMIC_DRAW);
 
-        glm::mat4 transformation = glm::mat4(1.0f);
-        transformation = glm::translate(transformation, glm::vec3(-0.5, 0.5, 0.5));
-        transformation = glm::rotate(transformation, (float)glfwGetTime(), glm::vec3(0.0, 0.0, -1.0));
-        transformation = glm::scale(transformation, glm::vec3(0.65, 0.65, 0.65));
-        glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(color), sizeof(transformation), glm::value_ptr(transformation));
+        transformations[2] = glm::translate(transformations[2], glm::vec3(-0.5, -0.5, 0.5));
+        transformations[2] = glm::rotate(transformations[2], (float)glfwGetTime(), glm::vec3(0.0, 0.0, -1.0));
+        transformations[2] = glm::scale(transformations[2], glm::vec3(0.65, 0.65, 0.65));
+      
+
+        //transformations[3] = glm::translate(transformations[3], glm::vec3(0.5, -0.5, 0.5));
+        transformations[3] = glm::rotate(transformations[3], (float)glfwGetTime(), glm::vec3(0.0, 0.0, -1.0));
+        //transformations[3] = glm::scale(transformations[3], glm::vec3(0.65, 0.65, 0.65));
+        
+        glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(color), sizeof(transformations), &transformations[0]);
 
         glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, 4);
-
+        int a;
+        //std::cin >> a;
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
