@@ -12,6 +12,5 @@ out vec4 Color;
 void main()
 {
     gl_Position = ssbo.transformations[gl_InstanceID] * vec4(aPos, 1.0f);
-	gl_Position = ssbo.transformations[gl_InstanceID+1] * vec4(aPos, 1.0f);
 	Color = ssbo.color;
 }

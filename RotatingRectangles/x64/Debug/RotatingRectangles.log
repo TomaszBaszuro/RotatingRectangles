@@ -1,4 +1,2 @@
 ﻿  main.cpp
-D:\Projekty\RotatingRectangles\RotatingRectangles\main.cpp(115,13): warning C4101: 'a': unreferenced local variable
-LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   RotatingRectangles.vcxproj -> D:\Projekty\RotatingRectangles\x64\Debug\RotatingRectangles.exe
